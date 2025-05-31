@@ -7,9 +7,11 @@ public class WordGraph {
 
     public void addEdge(String from, String to, int weight) {
         graph.computeIfAbsent(from, k -> new HashMap<>());
+        graph.computeIfAbsent(to, k -> new HashMap<>()); // 确保 to 也存在
         Map<String, Integer> edges = graph.get(from);
         edges.put(to, edges.getOrDefault(to, 0) + 1);
     }
+
 
     public void buildGraph(String[] words) {
         for (int i = 0; i < words.length - 1; i++) {
@@ -20,6 +22,7 @@ public class WordGraph {
     }
 
     public void printGraph() {
+        System.out.println("当前图中所有节点：" + graph.keySet());
         for (String from : graph.keySet()) {
             Map<String, Integer> neighbors = graph.get(from);
             for (String to : neighbors.keySet()) {
@@ -37,7 +40,7 @@ public class WordGraph {
         Set<String> result = new HashSet<>();
 
         if (!graph.containsKey(word1) || !graph.containsKey(word2)) {
-            return null; // 表示至少有一个词不在图中
+            return new HashSet<>(); // 表示至少有一个词不在图中
         }
 
         Map<String, Integer> word1Edges = graph.get(word1);
